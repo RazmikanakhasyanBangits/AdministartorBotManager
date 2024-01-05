@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option csharp_namespace = "UserActionsProto";
+
+package UserActions;
+
+service UserActions {
+	rpc BlockUser (BlockUserGrpcRequestModel) returns (BlockUserGrpcResponseModel);
+    rpc UnblockUser (UnblockUserGrpcRequest) returns (UnblockUserGrpcResponse);
+}
+
+message BlockUserGrpcRequestModel {
+	string UserName = 1;
+
+}
+
+message BlockUserGrpcResponseModel {
+	bool Status=1;
+}
+
+message UnblockUserGrpcRequest
+{
+	string UserName=1;
+}
+message UnblockUserGrpcResponse
+{
+	bool Status=1;
+}
+
