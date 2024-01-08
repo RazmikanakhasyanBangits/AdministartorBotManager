@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Grpc.Client\Grpc.Client.csproj" />
+    <ProjectReference Include="..\Repository\Repository.csproj" />
     <ProjectReference Include="..\ServiceModels\Service.Model.csproj" />
   </ItemGroup>
 	

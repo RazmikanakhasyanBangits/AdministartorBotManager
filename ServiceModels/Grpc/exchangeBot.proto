@@ -7,13 +7,19 @@ package UserActions;
 service UserActions {
 	rpc BlockUser (BlockUserGrpcRequestModel) returns (BlockUserGrpcResponseModel);
     rpc UnblockUser (UnblockUserGrpcRequest) returns (UnblockUserGrpcResponse);
+	rpc StopBot(StopBotGrpcRequest)returns(StopBotGrpcResponse);
+	rpc ReStartBot(ReStartBotGrpcRequest)returns(ReStartBotGrpcResponse);
 }
+
+message StopBotGrpcRequest{}
+message StopBotGrpcResponse{}
+message ReStartBotGrpcRequest{}
+message ReStartBotGrpcResponse{}
 
 message BlockUserGrpcRequestModel {
 	string UserName = 1;
 
 }
-
 message BlockUserGrpcResponseModel {
 	bool Status=1;
 }

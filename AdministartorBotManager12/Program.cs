@@ -1,3 +1,4 @@
+using Repository;
 using Service;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.InjectServices();
+builder.Services.InjectRepositories(builder.Configuration["ConnectionString"]);
+
+
 
 WebApplication app = builder.Build();
 

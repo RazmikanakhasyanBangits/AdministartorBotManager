@@ -2,6 +2,7 @@
 using Grpc.Client.Abstraction;
 using Grpc.Client.Implementation;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Service.Abstraction;
 using Service.Helpers;
 using Service.Implementation;

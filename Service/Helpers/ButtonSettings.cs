@@ -9,10 +9,10 @@ namespace Service.Helpers
         {
             return new(new[]
                    {
-                     new KeyboardButton("/all"),
-                     new KeyboardButton("/allBest"),
-                     new KeyboardButton("/available"),
-                     new KeyboardButton("/location")
+                     new KeyboardButton("/GetUsers"),
+                     new KeyboardButton("/ReStartBot"),
+                     new KeyboardButton("/StopBot"),
+                     new KeyboardButton("/Help"),
                    })
             { ResizeKeyboard = true };
         }

@@ -25,4 +25,20 @@ public class UserActionsClient : IUserActionsClient
         UserActions.UserActionsClient client = new(channel);
         return await client.UnblockUserAsync(model);
     }
+
+    public async Task ReStartBotAsync()
+    {
+        Channel channel = new(_configuration["Services:ExchangeBotManager"], ChannelCredentials.Insecure);
+        UserActions.UserActionsClient client = new(channel);
+        await client.ReStartBotAsync(new ReStartBotGrpcRequest());
+    }
+
+    public Task<StopBotGrpcResponse> StopBotAsync()
+    {
+        Channel channel = new(_configuration["Services:ExchangeBotManager"], ChannelCredentials.Insecure);
+        UserActions.UserActionsClient client = new(channel);
+
+        return client.StopBotAsync(new StopBotGrpcRequest()).ResponseAsync;
+
+    }
 }
