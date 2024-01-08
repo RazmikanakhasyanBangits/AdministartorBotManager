@@ -5,7 +5,7 @@ namespace Service.Helpers
 {
     public static class ButtonSettings
     {
-        public static ReplyKeyboardMarkup ShowButtons(long chatId, TelegramBotClient sender)
+        public static ReplyKeyboardMarkup ShowButtons()
         {
             return new(new[]
                    {

@@ -19,16 +19,16 @@ public class UserActionService : IUserActionService
 
     public async Task<(InlineKeyboardMarkup,string)> GetUserDataAsync(string username)
     {
-        var user = await _userRepository.GetDetailsAsync(x => x.UserName==username);
+        var user = await _userRepository.GetDetailsAsync(x => x.UserExternalId.ToString() == username);
         List<List<InlineKeyboardButton>> buttonRows = new List<List<InlineKeyboardButton>>();
         List<InlineKeyboardButton> currentRow = new List<InlineKeyboardButton>();
         var status = user.StatusId==(short)UserStatusEnum.Active ? "✅"+UserStatusEnum.Active.ToString() : "🚫"+UserStatusEnum.Blocked.ToString();
-        var userName = InlineKeyboardButton.WithCallbackData($"UserName: {user.UserName}", user.UserName);
-        var firstName = InlineKeyboardButton.WithCallbackData($"FistName: {user.FirstName}", user.UserName);
-        var lastName = InlineKeyboardButton.WithCallbackData($"LastName: {user.LastName}", user.UserName);
-        var lastUpdateDate = InlineKeyboardButton.WithCallbackData($"LastUpdateDate: {user.LastUpdateDate}", user.UserName);
-        var creationDate = InlineKeyboardButton.WithCallbackData($"LastUpdateDate: {user.CreationDate}", user.UserName);
-        var userStatus = InlineKeyboardButton.WithCallbackData($"Status: {status}", user.UserName);
+        var userName = InlineKeyboardButton.WithCallbackData($"UserName: {user.UserName ?? "Unknown"}", user.UserName ?? "Unknown");
+        var firstName = InlineKeyboardButton.WithCallbackData($"FistName: {user.FirstName??"Unknown"}", user.FirstName ?? "Unknown");
+        var lastName = InlineKeyboardButton.WithCallbackData($"LastName: {user.LastName ?? "Unknown"}", user.LastName ?? "Unknown");
+        var lastUpdateDate = InlineKeyboardButton.WithCallbackData($"LastUpdateDate: {user.LastUpdateDate}", user.LastUpdateDate.ToString());
+        var creationDate = InlineKeyboardButton.WithCallbackData($"CreationDate: {user.CreationDate}", user.CreationDate.ToString());
+        var userStatus = InlineKeyboardButton.WithCallbackData($"Status: {status}", status);
         currentRow.Add(userName);
         currentRow.Add(firstName);
         buttonRows.Add(currentRow);
@@ -49,10 +49,10 @@ public class UserActionService : IUserActionService
         {
             InlineKeyboardButton.WithCallbackData($"Back To List", "/BackToList"),
             InlineKeyboardButton.WithCallbackData(user.StatusId is (short)UserStatusEnum.Active ? "🚫Block" : "✅Unblock",
-            user.StatusId is (short)UserStatusEnum.Active ? $"/Block.{user.UserName}" : $"/Unblock.{user.UserName}")
+            user.StatusId is (short)UserStatusEnum.Active ? $"/Block.{user.UserExternalId}" : $"/Unblock.{user.UserExternalId}")
         };
         buttonRows.Add(currentRow);
-        return (new InlineKeyboardMarkup(buttonRows),user.UserName);
+        return (new InlineKeyboardMarkup(buttonRows),user.UserExternalId.ToString());
     }
     public async Task<InlineKeyboardMarkup> GetUsersAsync(string page = "1")
     {
@@ -65,7 +65,8 @@ public class UserActionService : IUserActionService
 
         foreach (var user in users.Results)
         {
-            var button = InlineKeyboardButton.WithCallbackData("@"+user.UserName, user.UserName);
+            var userName = user.UserName ?? user.FirstName ?? user.LastName ?? "Unknown";
+            var button = InlineKeyboardButton.WithCallbackData("@" + userName,$"UserId.{user.UserExternalId}");
 
             currentRow.Add(button);
 

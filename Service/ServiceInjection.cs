@@ -13,7 +13,6 @@ public static class ServiceInjection
 {
     public static IServiceCollection InjectServices(this IServiceCollection services)
     {
-        _ = services.AddScoped<ICommandHandler, TelegramCommandHandler>();
         _ = services.AddScoped<CommandSwitcher>();
         _ = services.AddHostedService<TelegramCommandHandler>();
         _ = services.AddScoped<IUserActionsClient, UserActionsClient>();
