@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+option csharp_namespace = "UserActionsProto";
+package RateActions;
+
+service RateActions {
+	rpc UpdateRates (google.protobuf.Empty) returns (google.protobuf.Empty);
+}
+
+

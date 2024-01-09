@@ -13,10 +13,12 @@ public static class ServiceInjection
 {
     public static IServiceCollection InjectServices(this IServiceCollection services)
     {
-        _ = services.AddScoped<CommandSwitcher>();
-        _ = services.AddHostedService<TelegramCommandHandler>();
-        _ = services.AddScoped<IUserActionsClient, UserActionsClient>();
-        _ = services.AddScoped<IUserActionService, UserActionService>();
+        services.AddScoped<CommandSwitcher>();
+        services.AddHostedService<TelegramCommandHandler>();
+        services.AddHostedService<RatesUpdateScheduleService>();
+        services.AddScoped<IUserActionsClient, UserActionsClient>();
+        services.AddScoped<IUserActionService, UserActionService>();
+        services.AddScoped<IRateActionClient, RateActionClient>();
         return services;
     }
 }

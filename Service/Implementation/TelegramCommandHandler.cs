@@ -1,10 +1,10 @@
-﻿using ExchangeBot.Abstraction;
+﻿using Grpc.Client.Abstraction;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Service.Abstraction;
 using Service.Helpers;
-using System.Text.RegularExpressions;
+using Service.Model;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -20,7 +20,7 @@ namespace Service.Implementation
         private readonly IServiceScopeFactory _scopeFactory;
         private static int currentPage = 1;
         private static string lastUserId;
-        private ReceiverOptions receiverOptions;
+        private readonly ReceiverOptions receiverOptions;
 
         public TelegramCommandHandler(IConfiguration configuration, IServiceScopeFactory scopeFactory)
         {
@@ -84,7 +84,7 @@ namespace Service.Implementation
             {
                 try
                 {
-                    switch (update.Message.Text)
+                    switch (update.Message.Text.ToLower())
                     {
                         case "/start":
                             ReplyKeyboardMarkup buttons = ButtonSettings.ShowButtons();
@@ -96,7 +96,7 @@ namespace Service.Implementation
                             replyMarkup: buttons);
                             _ = await Bot.SendTextMessageAsync(update.Message.Chat.Id, "Done!");
                             break;
-                        case "/GetUsers":
+                        case "/get_users":
                             using (IServiceScope scope = _scopeFactory.CreateScope())
                             {
                                 IServiceProvider scopedServices = scope.ServiceProvider;
@@ -106,6 +106,15 @@ namespace Service.Implementation
                                    chatId: update.Message.Chat.Id,
                                    text: "Users List:",
                                    replyMarkup: await userActionService.GetUsersAsync());
+                            }
+                            break;
+                        case "/update_rates":
+                            using (IServiceScope scope = _scopeFactory.CreateScope())
+                            {
+                                IServiceProvider scopedServices = scope.ServiceProvider;
+                                IRateActionClient rateActionClient = scopedServices.GetRequiredService<IRateActionClient>();
+                                await rateActionClient.UpdateRatesAsync();
+                                await Bot.SendTextMessageAsync(update.Message.Chat.Id, "Done!");
                             }
                             break;
                         default:
@@ -119,8 +128,9 @@ namespace Service.Implementation
 
                     }
                 }
-                catch (Exception)
+                catch
                 {
+                    //ignore
                 }
 
             }
@@ -128,6 +138,7 @@ namespace Service.Implementation
 
         private async Task HandleUpdateAsync(ITelegramBotClient client, Update update, CancellationToken token)
         {
+
             try
             {
                 switch (update.Type)
@@ -152,18 +163,23 @@ namespace Service.Implementation
             }
 
         }
-        public Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             Bot.StartReceiving(
                  updateHandler: HandleUpdateAsync,
                  pollingErrorHandler: HandlePollingErrorAsync,
                  receiverOptions: receiverOptions,
                  cancellationToken: CancellationToken.None);
-
-            Bot.GetMeAsync();
+            var commands = new List<BotCommand>
+        {
+            new BotCommand() { Command=nameof(StaticCommandsCollection.get_users), Description= StaticCommandsCollection.get_users },
+            new BotCommand() { Command=nameof(StaticCommandsCollection.update_rates), Description= StaticCommandsCollection.update_rates },
+            new BotCommand() { Command=nameof(StaticCommandsCollection.update_locations), Description= StaticCommandsCollection.update_locations }
+        };
+            await BotCommandHelper.SetBotCommandsAsync(Bot);
+            await Bot.GetMeAsync();
             Console.WriteLine($"Start listening for @");
             Console.WriteLine();
-            return Task.CompletedTask;
         }
 
         private async Task HandlePollingErrorAsync(ITelegramBotClient client, Exception exception, CancellationToken token)

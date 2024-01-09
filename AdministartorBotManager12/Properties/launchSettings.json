@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "AdministartorBotManager12": {
+    "AdministartorBotManager": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "swagger",
