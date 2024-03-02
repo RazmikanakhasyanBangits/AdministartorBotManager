@@ -10,7 +10,7 @@ public static class RepositoryInjection
     public static IServiceCollection InjectRepositories(this IServiceCollection services, string connectionString)
     {
         services.AddScoped<IUserRepository, UserRepository>();
-        _ = services.AddDbContext<Tech42_TelegramBotDBContext>(_ => _.UseSqlServer(connectionString),ServiceLifetime.Transient);
+        _ = services.AddDbContext<ExchangeBotDbContext>(_ => _.UseSqlServer(connectionString),ServiceLifetime.Transient);
 
         return services;
     }

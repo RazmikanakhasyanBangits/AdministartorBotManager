@@ -6,13 +6,13 @@ using Repository.Entity;
 
 namespace Repository
 {
-    public partial class Tech42_TelegramBotDBContext : DbContext
+    public partial class ExchangeBotDbContext : DbContext
     {
-        public Tech42_TelegramBotDBContext()
+        public ExchangeBotDbContext()
         {
         }
 
-        public Tech42_TelegramBotDBContext(DbContextOptions<Tech42_TelegramBotDBContext> options)
+        public ExchangeBotDbContext(DbContextOptions<ExchangeBotDbContext> options)
             : base(options)
         {
         }
@@ -31,7 +31,7 @@ namespace Repository
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=DESKTOP-DP52C93\\SQLEXPRESS;database=Tech42_TelegramBotDB;Trusted_Connection=true");
+                optionsBuilder.UseSqlServer("Server=PUNCK2021;Database=ExchangeBotDb;Integrated Security=True;TrustServerCertificate=True;");
             }
         }
 
