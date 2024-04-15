@@ -21,7 +21,7 @@ namespace Repository
         public virtual DbSet<BotHistory> BotHistories { get; set; }
         public virtual DbSet<ChatDetail> ChatDetails { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
-        public virtual DbSet<Location> Locations { get; set; }
+        public DbSet<BankLocation> Locations { get; set; }
         public virtual DbSet<Rate> Rates { get; set; }
         public virtual DbSet<UserRole> UserRoles { get; set; }
         public virtual DbSet<UserStatus> UserStatuses { get; set; }
@@ -31,7 +31,7 @@ namespace Repository
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=PUNCK2021;Database=ExchangeBotDb;Integrated Security=True;TrustServerCertificate=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-DP52C93\\SQLEXPRESS;Database=ExchangeBotDb;Integrated Security=True;TrustServerCertificate=True;");
             }
         }
 

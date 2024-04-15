@@ -1,4 +1,4 @@
-﻿using Service.Model;
+﻿using Service.Model.StaticModels;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 

@@ -1,4 +1,4 @@
-﻿namespace Service.Model;
+﻿namespace Service.Model.StaticModels;
 
 public static class StaticCommandsCollection
 {

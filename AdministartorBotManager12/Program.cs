@@ -1,5 +1,6 @@
 using Repository;
 using Service;
+using Service.Profile;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.InjectServices();
 builder.Services.InjectRepositories(builder.Configuration["ConnectionString"]);
 
-
+_ = builder.Services.AddAutoMapper(typeof(LocationProfile));
 
 WebApplication app = builder.Build();
 

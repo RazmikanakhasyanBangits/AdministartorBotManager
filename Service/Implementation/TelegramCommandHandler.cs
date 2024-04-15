@@ -2,9 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Repository.Abstraction;
 using Service.Abstraction;
 using Service.Helpers;
-using Service.Model;
+using Service.Model.StaticModels;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -114,6 +115,15 @@ namespace Service.Implementation
                                 IServiceProvider scopedServices = scope.ServiceProvider;
                                 IRateActionClient rateActionClient = scopedServices.GetRequiredService<IRateActionClient>();
                                 await rateActionClient.UpdateRatesAsync();
+                                await Bot.SendTextMessageAsync(update.Message.Chat.Id, "Done!");
+                            }
+                            break;
+                        case "/update_locations":
+                            using (IServiceScope scope = _scopeFactory.CreateScope())
+                            {
+                                IServiceProvider scopedServices = scope.ServiceProvider;
+                                ILocationService locationService = scopedServices.GetRequiredService<ILocationService>();
+                                await locationService.UpdateAllBankLocationsAsync();
                                 await Bot.SendTextMessageAsync(update.Message.Chat.Id, "Done!");
                             }
                             break;
